@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Form</title>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-10">
+        <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">Translation Form</h1>
+        <form id="translationForm" class="max-w-md mx-auto">
+            <div class="mb-4">
+                <label for="inputText" class="block text-sm font-medium text-gray-700">Text to Translate</label>
+                <textarea id="inputText" name="inputText" rows="3" class="w-full border-gray-300 rounded-md shadow-sm focus:border-gray-100  focus:ring-opacity-10"></textarea>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Translate
+                </button>
+            </div>
+        </form>
+        <div id="translationResult" class="mt-6 text-center hidden">
+            <h2 class="text-xl font-semibold text-gray-800 mb-2">Translated Text</h2>
+            <p id="translatedText" class="text-lg text-gray-700"></p>
+        </div>
+        <div id="error" class="mt-6 text-center hidden">
+            <p id="errorMessage" class="text-red-600"></p>
+        </div>
+    </div>
+    
+
+    <!-- Include Axios for making HTTP requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Function to handle form submission
+        const handleFormSubmit = async (event) => {
+            event.preventDefault(); // Prevent default form submission
+            const inputText = document.getElementById('inputText').value; // Get input text
+            try {
+                // Send POST request to server
+                const response = await axios.post('/translate', { text: inputText });
+                // Update UI with translated text
+                document.getElementById('translatedText').textContent = response.data.translated_text;
+                document.getElementById('translationResult').classList.remove('hidden');
+                document.getElementById('error').classList.add('hidden');
+            } catch (error) {
+                // Display error message
+                document.getElementById('errorMessage').textContent = error.response.data.error;
+                document.getElementById('error').classList.remove('hidden');
+                document.getElementById('translationResult').classList.add('hidden');
+            }
+        };
+
+        // Add event listener to form submission
+        document.getElementById('translationForm').addEventListener('submit', handleFormSubmit);
+    </script>
+</body>
+</html>
