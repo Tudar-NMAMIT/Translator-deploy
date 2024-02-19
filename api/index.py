@@ -10,7 +10,7 @@ app = Flask(__name__)
 model = load_model('api/model.h5')
 
 # Load the tokenizers
-with open('api/kan_tokenizer.pkl', 'rb') as f:
+with open('/kan_tokenizer.pkl', 'rb') as f:
     tokenizer_kan = load(f)
 
 with open('api/tulu_tokenizer.pkl', 'rb') as f:
